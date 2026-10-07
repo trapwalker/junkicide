@@ -81,12 +81,17 @@ def match_installer(filename: str) -> App | None:
     """Дистрибутив «Telegram-4.2.1.dmg» → установленное приложение Telegram."""
     stem = norm(re.sub(r"\.(dmg|pkg|zip|xip|iso)$", "", filename, flags=re.I))
     stem = re.sub(r"(v?\d+)+.*$", "", stem) or stem  # отрезать версию
-    best = None
+    exact, longer, shorter = None, None, None
     for a in installed_apps():
         n = norm(a.name)
         if len(n) < 4:
             continue
-        if stem.startswith(n) or (len(stem) >= 5 and n.startswith(stem)):
-            if best is None or len(norm(best.name)) < len(n):
-                best = a
-    return best
+        if n == stem:
+            exact = a
+        elif stem.startswith(n):  # «telegrammacos» → Telegram
+            if longer is None or len(norm(longer.name)) < len(n):
+                longer = a
+        elif len(stem) >= 5 and n.startswith(stem) and len(n) - len(stem) <= 6:  # «vscode» → «VSCode Insiders»
+            if shorter is None or len(norm(shorter.name)) > len(n):
+                shorter = a
+    return exact or longer or shorter

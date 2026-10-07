@@ -181,6 +181,15 @@ class FindingStore:
                 self._items[f.id] = f
             self.version += 1
 
+    def remove(self, ids: list[str]) -> None:
+        with self._lock:
+            changed = False
+            for fid in ids:
+                if self._items.pop(fid, None) is not None:
+                    changed = True
+            if changed:
+                self.version += 1
+
     def get(self, fid: str) -> Finding | None:
         with self._lock:
             return self._items.get(fid)
