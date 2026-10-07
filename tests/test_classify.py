@@ -1,8 +1,8 @@
 import time
 
-from hogwatch.knowledge.files import artifact_kind, classify_file, is_dashcam_name
-from hogwatch.model import Finding, FindingStore, Resource, Risk
-from hogwatch.scanners.docker import parse_size
+from wtf.knowledge.files import artifact_kind, classify_file, is_dashcam_name
+from wtf.model import Finding, FindingStore, Resource, Risk
+from wtf.scanners.docker import parse_size
 
 OLD = time.time() - 400 * 86400
 
@@ -60,7 +60,7 @@ def test_store_runs_drop_unseen_but_keep_resolved():
 
 
 def test_finding_roundtrip():
-    from hogwatch.model import Action, ActionKind
+    from wtf.model import Action, ActionKind
 
     f = Finding("x", "sc", Resource.DISK, "X", actions=[Action(ActionKind.KILL, "k", pids=[(1, 2.0)])],
                 facts=[("a", "b")])

@@ -2,32 +2,32 @@
 
 from pathlib import Path
 
-from hogwatch.config import Config
-from hogwatch.journal import Journal
-from hogwatch.model import Action, ActionKind, Finding, Resource, Risk
-from hogwatch.scanners.processes import ProcessScanner
-from hogwatch.scanners.system import SystemScanner
-from hogwatch.tui.app import HogwatchApp
-from hogwatch.tui.screens import ActionMenu, Confirm, Help
+from wtf.config import Config
+from wtf.journal import Journal
+from wtf.model import Action, ActionKind, Finding, Resource, Risk
+from wtf.scanners.processes import ProcessScanner
+from wtf.scanners.system import SystemScanner
+from wtf.tui.app import WtfApp
+from wtf.tui.screens import ActionMenu, Confirm, Help
 
 
-def make_app(tmp_path: Path) -> HogwatchApp:
+def make_app(tmp_path: Path) -> WtfApp:
     cfg = Config(path=tmp_path / "config.toml")
-    app = HogwatchApp(cfg, Journal(tmp_path / "j.jsonl"), [SystemScanner(), ProcessScanner()])
+    app = WtfApp(cfg, Journal(tmp_path / "j.jsonl"), [SystemScanner(), ProcessScanner()])
     long_title = "Очень длинное имя файла с [квадратными скобками] " * 4
     app.store.upsert([
         Finding("t:1", "test", Resource.DISK, long_title, location="/tmp/nonexistent", bytes=5 * 1024**3,
                 risk=Risk.SAFE, confidence=0.9, what="что", origin="откуда", danger="чем грозит",
                 facts=[("Путь", "/tmp/a\n/tmp/b")],
-                actions=[Action(ActionKind.TRASH, "В Корзину", paths=["/tmp/hogwatch-nonexistent"])],
-                paths=["/tmp/hogwatch-nonexistent"]),
+                actions=[Action(ActionKind.TRASH, "В Корзину", paths=["/tmp/wtf-nonexistent"])],
+                paths=["/tmp/wtf-nonexistent"]),
     ])
     return app
 
 
 async def test_tui_smoke(tmp_path, monkeypatch):
-    monkeypatch.setattr("hogwatch.cache.save", lambda *a, **k: None)
-    monkeypatch.setattr("hogwatch.cache.load", lambda *a, **k: [])
+    monkeypatch.setattr("wtf.cache.save", lambda *a, **k: None)
+    monkeypatch.setattr("wtf.cache.load", lambda *a, **k: [])
     for size in [(160, 45), (80, 30)]:
         app = make_app(tmp_path)
         async with app.run_test(size=size) as pilot:

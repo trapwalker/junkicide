@@ -10,7 +10,7 @@ from pathlib import Path
 
 from .util import HOME
 
-LOG_DIR = HOME / "Library" / "Logs" / "hogwatch"
+LOG_DIR = HOME / "Library" / "Logs" / "wtf"
 LOG_FILE = LOG_DIR / "journal.jsonl"
 
 LEVELS = ("debug", "info", "action", "warn", "error")

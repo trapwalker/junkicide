@@ -1,4 +1,4 @@
-"""Точка входа: `hogwatch` (TUI) или `hogwatch --report` (текстовый отчёт для терминала/скриптов)."""
+"""Точка входа: `wtf` (TUI) или `wtf --report` (текстовый отчёт для терминала/скриптов)."""
 
 from __future__ import annotations
 
@@ -72,7 +72,7 @@ def report(args, config: Config, journal: Journal) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
-        prog="hogwatch",
+        prog="wtf",
         description="Найти и осознанно прибить забытые прожорливые процессы и ненужные гигабайты на macOS.",
     )
     p.add_argument("--report", type=int, metavar="СЕК", nargs="?", const=120,
@@ -81,19 +81,19 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("-v", "--verbose", action="store_true", help="в отчёте показывать пути")
     p.add_argument("--no-walk", action="store_true", help="не делать полный обход домашней папки (быстрее)")
     p.add_argument("--no-disk", action="store_true", help="только процессы, без анализа диска")
-    p.add_argument("--version", action="version", version=f"hogwatch {__version__}")
+    p.add_argument("--version", action="version", version=f"wtf {__version__}")
     args = p.parse_args(argv)
 
     if sys.platform != "darwin":
-        print("hogwatch рассчитан на macOS.", file=sys.stderr)
+        print("wtf рассчитан на macOS.", file=sys.stderr)
     config = Config.load()
     journal = Journal()
     if args.report is not None:
         return report(args, config, journal)
 
-    from .tui.app import HogwatchApp
+    from .tui.app import WtfApp
 
-    HogwatchApp(config, journal, make_scanners(args)).run()
+    WtfApp(config, journal, make_scanners(args)).run()
     return 0
 
 
