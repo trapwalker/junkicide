@@ -10,7 +10,7 @@ uv tool install --editable ~/projects/own/junkicide   # один раз; дал�
 junkicide
 ```
 
-Без установки: `uvx --from ~/projects/own/junkicide junkicide`; после публикации на PyPI — просто `uvx junkicide`.
+Без установки, на любом Mac: `uvx junkicide` ([PyPI](https://pypi.org/project/junkicide/)).
 
 ## Как работает
 

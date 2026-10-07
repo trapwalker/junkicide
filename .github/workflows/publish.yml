@@ -35,3 +35,5 @@ jobs:
           name: dist
           path: dist/
       - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true  # повторный запуск по уже опубликованной версии не падает
