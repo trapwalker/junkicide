@@ -10,9 +10,9 @@ from pathlib import Path
 
 from .util import HOME
 
-CONFIG_DIR = Path(os.environ.get("XDG_CONFIG_HOME", HOME / ".config")) / "wtf"
+CONFIG_DIR = Path(os.environ.get("XDG_CONFIG_HOME", HOME / ".config")) / "junkicide"
 CONFIG_FILE = CONFIG_DIR / "config.toml"
-CACHE_DIR = HOME / "Library" / "Caches" / "wtf"
+CACHE_DIR = HOME / "Library" / "Caches" / "junkicide"
 
 
 @dataclass
@@ -48,7 +48,7 @@ class Config:
             return "[\n" + "".join(f"  {json.dumps(i, ensure_ascii=False)},\n" for i in items) + "]"
 
         text = (
-            "# wtf — настройки. Файл можно копировать между компьютерами.\n\n"
+            "# junkicide — настройки. Файл можно копировать между компьютерами.\n\n"
             "[thresholds]\n"
             f"cpu_percent = {self.cpu_percent}  # устойчивая загрузка, % одного ядра\n"
             f"app_memory_mb = {self.app_memory_mb}\n"

@@ -1,4 +1,4 @@
-"""Главное окно wtf."""
+"""Главное окно junkicide."""
 
 from __future__ import annotations
 
@@ -24,8 +24,8 @@ from .screens import ActionMenu, Confirm, Help, Output, confirm_text
 DISK_SCANNERS = ("known", "walk", "spotlight", "apps")
 
 
-class WtfApp(App):
-    TITLE = "wtf"
+class JunkicideApp(App):
+    TITLE = "junkicide"
     CSS_PATH = "app.tcss"
     BINDINGS = [
         Binding("q", "quit", "Выход"),
@@ -101,7 +101,7 @@ class WtfApp(App):
         if cached:
             self.store.upsert(cached)
             self.journal.info("cache.load", f"Показаны результаты прошлого сканирования: {len(cached)} находок")
-        self.journal.info("start", "wtf запущен")
+        self.journal.info("start", "junkicide запущен")
         self.runner.start()
         self._layout_for(self.size.width)
         self._rebuild_columns()
@@ -459,4 +459,4 @@ class WtfApp(App):
     def on_unmount(self) -> None:
         self.runner.stop()
         cache.save(self.store.snapshot())
-        self.journal.info("stop", f"wtf закрыт: в Корзину {human_bytes(self.trashed)}, освобождено {human_bytes(self.freed)}")
+        self.journal.info("stop", f"junkicide закрыт: в Корзину {human_bytes(self.trashed)}, освобождено {human_bytes(self.freed)}")

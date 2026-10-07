@@ -291,7 +291,7 @@ class KnownPathsScanner(Scanner):
         except OSError:
             return []
         for e in entries:
-            if e.path in covered or e.name in ("JetBrains", "Google", "wtf"):
+            if e.path in covered or e.name in ("JetBrains", "Google", "junkicide"):
                 continue
             size = du_bytes(e.path)
             if size < cfg.min_dir_mb * MB:

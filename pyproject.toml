@@ -1,5 +1,5 @@
 [project]
-name = "wtf-mac"
+name = "junkicide"
 version = "0.1.0"
 description = "TUI для macOS: найти и осознанно прибить забытые прожорливые процессы и ненужные гигабайты на диске"
 readme = "README.md"
@@ -16,14 +16,14 @@ classifiers = [
 ]
 
 [project.scripts]
-wtf = "wtf.__main__:main"
+junkicide = "junkicide.__main__:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/wtf"]
+packages = ["src/junkicide"]
 
 [dependency-groups]
 dev = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.5"]

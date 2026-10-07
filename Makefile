@@ -1,4 +1,4 @@
-# wtf — управление проектом
+# junkicide — управление проектом
 .PHONY: help install run report report-quick test lint fmt build clean uvx journal config
 
 help:            ## Показать команды
@@ -8,13 +8,13 @@ install:         ## Установить зависимости (uv sync)
 	uv sync
 
 run:             ## Запустить TUI из исходников
-	uv run wtf
+	uv run junkicide
 
 report:          ## Текстовый отчёт без интерфейса (полный обход, до 2 минут)
-	uv run wtf --report 120 -v
+	uv run junkicide --report 120 -v
 
 report-quick:    ## Быстрый отчёт: процессы и известные места, без обхода диска
-	uv run wtf --report 40 --no-walk
+	uv run junkicide --report 40 --no-walk
 
 test:            ## Тесты
 	uv run pytest -q
@@ -29,15 +29,15 @@ build:           ## Собрать wheel/sdist в dist/
 	uv build
 
 uvx:             ## Запустить так, как это сделает пользователь (uvx из локальной папки)
-	uvx --from . wtf
+	uvx --from . junkicide
 
 journal:         ## Открыть журнал действий
-	open -R ~/Library/Logs/wtf/journal.jsonl
+	open -R ~/Library/Logs/junkicide/journal.jsonl
 
 config:          ## Открыть файл настроек
-	@test -f ~/.config/wtf/config.toml || uv run python -c "from wtf.config import Config; Config.load().save()"
-	open ~/.config/wtf/config.toml
+	@test -f ~/.config/junkicide/config.toml || uv run python -c "from junkicide.config import Config; Config.load().save()"
+	open ~/.config/junkicide/config.toml
 
 clean:           ## Удалить артефакты сборки и кэш прошлых сканирований
 	rm -rf dist build .pytest_cache .ruff_cache
-	rm -f ~/Library/Caches/wtf/findings.json
+	rm -f ~/Library/Caches/junkicide/findings.json
