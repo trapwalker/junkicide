@@ -175,10 +175,16 @@ class FindingStore:
 
     def replace_scanner(self, scanner: str, findings: list[Finding]) -> None:
         with self._lock:
-            for fid in [k for k, v in self._items.items() if v.scanner == scanner]:
+            for fid in [k for k, v in self._items.items() if v.scanner == scanner and not v.resolved]:
                 del self._items[fid]
+            seen = self._run_seen.get(scanner)
             for f in findings:
+                old = self._items.get(f.id)
+                if old is not None and old.resolved:
+                    continue
                 self._items[f.id] = f
+                if seen is not None:
+                    seen.add(f.id)
             self.version += 1
 
     def remove(self, ids: list[str]) -> None:

@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import hashlib
 import os
-import re
 import time
 from collections import defaultdict
 from concurrent.futures import Future, ThreadPoolExecutor
@@ -22,7 +21,7 @@ from ..knowledge.files import (
     is_dashcam_name,
     rebuild_hint,
 )
-from ..model import Action, ActionKind, Finding, Resource, Risk
+from ..model import Finding, Resource, Risk
 from ..util import (
     HOME,
     du_bytes,

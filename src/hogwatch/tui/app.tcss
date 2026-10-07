@@ -1,0 +1,129 @@
+Screen {
+    layout: vertical;
+}
+
+#summary, #potential {
+    height: auto;
+    padding: 0 1;
+    background: $panel;
+}
+
+#potential {
+    color: $text-muted;
+}
+
+#tabs {
+    height: 2;
+}
+
+#filter {
+    margin: 0 1;
+}
+
+#switcher {
+    height: 1fr;
+}
+
+#findings {
+    height: 1fr;
+}
+
+#table {
+    width: 3fr;
+    height: 1fr;
+}
+
+#details-box {
+    width: 2fr;
+    min-width: 40;
+    height: 1fr;
+    border-left: tall $primary-background;
+    padding: 0 1;
+}
+
+/* Узкий терминал: подробности под таблицей, таблица на всю ширину */
+#findings.narrow {
+    layout: vertical;
+}
+
+#findings.narrow #table {
+    width: 100%;
+    height: 3fr;
+}
+
+#findings.narrow #details-box {
+    width: 100%;
+    min-width: 0;
+    height: 2fr;
+    border-left: none;
+    border-top: tall $primary-background;
+}
+
+#journal-table {
+    height: 1fr;
+}
+
+#status {
+    height: auto;
+    padding: 0 1;
+    background: $panel;
+}
+
+/* --- модальные окна --- */
+
+ActionMenu, Confirm, Output, Help {
+    align: center middle;
+    background: $background 60%;
+}
+
+#dialog {
+    width: 90;
+    max-width: 95%;
+    height: auto;
+    max-height: 90%;
+    padding: 1 2;
+    border: thick $primary;
+    background: $surface;
+}
+
+#dialog.wide {
+    width: 120;
+    height: 90%;
+}
+
+#dialog.risky {
+    border: thick $error;
+}
+
+#dialog-title {
+    margin-bottom: 1;
+}
+
+#action-list {
+    height: auto;
+    max-height: 30;
+}
+
+#confirm-body {
+    height: auto;
+    max-height: 30;
+}
+
+#output-body {
+    height: 1fr;
+}
+
+#buttons {
+    height: auto;
+    margin-top: 1;
+    align-horizontal: right;
+}
+
+#buttons Button {
+    margin-left: 2;
+}
+
+.hint {
+    color: $text-muted;
+    margin-top: 1;
+}

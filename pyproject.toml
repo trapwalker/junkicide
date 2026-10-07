@@ -34,3 +34,7 @@ target-version = "py311"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "RUF100"]
+ignore = ["E731", "B023", "E501"]  # длину держим ~110, но эмодзи и русские тексты ruff считает неточно

@@ -10,7 +10,18 @@ import psutil
 
 from ..apps import installed_apps
 from ..model import Action, ActionKind, Finding, Resource, Risk
-from ..util import HOME, du_bytes, newest_mtime, fmt_date, human_bytes, human_duration, run, short_path, spotlight_meta, which
+from ..util import (
+    HOME,
+    du_bytes,
+    fmt_date,
+    human_bytes,
+    human_duration,
+    newest_mtime,
+    run,
+    short_path,
+    spotlight_meta,
+    which,
+)
 from .base import ScanContext, Scanner
 from .disk_known import reveal_action, trash_action
 
@@ -144,7 +155,10 @@ class UnusedAppsScanner(Scanner):
                 origin=("Последняя активность (по Spotlight и изменению файлов настроек программы) — "
                         + fmt_date(last) + "." if last else
                         "Нет ни записи о запуске в Spotlight, ни файлов настроек — похоже, ни разу не запускалась.")
-                       + (" Установлена через Homebrew." if cask else ""),
+                       + (" Установлена через Homebrew." if cask else "")
+                       + (" Android SDK и эмулятор (~/Library/Android/sdk) работают и без самой IDE — их часто "
+                          "запускают из командной строки, Flutter/React Native или AI-агенты; удаление Android "
+                          "Studio их не затронет." if "android.studio" in a.bundle_id else ""),
                 danger="Программу можно поставить снова, но платные лицензии иногда требуют повторной активации. "
                        "Вместе с данными пропадут её настройки и локальные файлы (документы — если программа "
                        "хранит их внутри ~/Library).",

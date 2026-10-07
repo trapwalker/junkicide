@@ -37,7 +37,8 @@ def _same_process(pid: int, ctime: float) -> psutil.Process | None:
 def kill(pids: list[tuple[int, float]], force: bool, wait: float = 5.0) -> Result:
     procs = [p for pid, ct in pids if (p := _same_process(pid, ct))]
     if not procs:
-        return Result(True, "Процесс уже завершён", resolved=True)
+        return Result(True, "Процесс уже завершён (если его PID занят новым процессом — тот не тронут)",
+                      resolved=True)
     sig = signal.SIGKILL if force else signal.SIGTERM
     errors = []
     for p in procs:
@@ -160,7 +161,8 @@ def execute(action: Action, finding: Finding | None, journal: Journal) -> Result
             res = empty_trash()
         elif k == ActionKind.REVEAL:
             path = action.paths[0] if action.paths else ""
-            code, _, err = run(["open", "-R", path])
+            # Корзину открываем как папку, остальное — выделяем в Finder
+            code, _, err = run(["open", path] if path.endswith("/.Trash") else ["open", "-R", path])
             res = Result(code == 0, "Показано в Finder" if code == 0 else err.strip())
         else:
             res = Result(False, f"Неизвестное действие {k}")

@@ -9,7 +9,15 @@ from collections import defaultdict
 
 import psutil
 
-from ..knowledge.processes import RULES, SYSTEM_PREFIXES, Proc, ProcRule, force_action, quit_app_action, term_action
+from ..knowledge.processes import (
+    RULES,
+    SYSTEM_PREFIXES,
+    Proc,
+    ProcRule,
+    force_action,
+    quit_app_action,
+    term_action,
+)
 from ..model import Action, ActionKind, Finding, Resource, Risk
 from ..util import fmt_date, human_bytes, human_duration, short_path
 from .base import ScanContext, Scanner
@@ -160,7 +168,7 @@ class ProcessScanner(Scanner):
                 del apps[key]
 
         # 3. Всё остальное, сгруппированное по приложениям
-        for key, ps in apps.items():
+        for ps in apps.values():
             cpu = sum(p.cpu for p in ps)
             rss = sum(p.rss for p in ps)
             if cpu >= cfg.cpu_percent or rss >= cfg.app_memory_mb * MB:

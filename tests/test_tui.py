@@ -1,0 +1,61 @@
+"""Smoke-тест интерфейса: живые сканеры процессов/системы + искусственные находки, без реальных действий."""
+
+from pathlib import Path
+
+from hogwatch.config import Config
+from hogwatch.journal import Journal
+from hogwatch.model import Action, ActionKind, Finding, Resource, Risk
+from hogwatch.scanners.processes import ProcessScanner
+from hogwatch.scanners.system import SystemScanner
+from hogwatch.tui.app import HogwatchApp
+from hogwatch.tui.screens import ActionMenu, Confirm, Help
+
+
+def make_app(tmp_path: Path) -> HogwatchApp:
+    cfg = Config(path=tmp_path / "config.toml")
+    app = HogwatchApp(cfg, Journal(tmp_path / "j.jsonl"), [SystemScanner(), ProcessScanner()])
+    long_title = "Очень длинное имя файла с [квадратными скобками] " * 4
+    app.store.upsert([
+        Finding("t:1", "test", Resource.DISK, long_title, location="/tmp/nonexistent", bytes=5 * 1024**3,
+                risk=Risk.SAFE, confidence=0.9, what="что", origin="откуда", danger="чем грозит",
+                facts=[("Путь", "/tmp/a\n/tmp/b")],
+                actions=[Action(ActionKind.TRASH, "В Корзину", paths=["/tmp/hogwatch-nonexistent"])],
+                paths=["/tmp/hogwatch-nonexistent"]),
+    ])
+    return app
+
+
+async def test_tui_smoke(tmp_path, monkeypatch):
+    monkeypatch.setattr("hogwatch.cache.save", lambda *a, **k: None)
+    monkeypatch.setattr("hogwatch.cache.load", lambda *a, **k: [])
+    for size in [(160, 45), (80, 30)]:
+        app = make_app(tmp_path)
+        async with app.run_test(size=size) as pilot:
+            await pilot.pause(2.5)
+            table = app.query_one("#table")
+            assert table.row_count >= 1
+            assert "t:1" in app.row_ids
+            app.query_one("#table").move_cursor(row=app.row_ids.index("t:1"))
+            await pilot.pause(0.2)
+            await pilot.press("a")
+            await pilot.pause(0.2)
+            assert isinstance(app.screen, ActionMenu)
+            await pilot.press("escape")
+            await pilot.press("d")
+            await pilot.pause(0.2)
+            assert isinstance(app.screen, Confirm)
+            await pilot.press("escape")
+            for key in "2345":
+                await pilot.press(key)
+                await pilot.pause(0.3)
+            await pilot.press("1")
+            await pilot.press("slash")
+            await pilot.press(*"длинное")
+            await pilot.pause(0.6)
+            assert app.row_ids == ["t:1"]
+            await pilot.press("escape")
+            await pilot.press("question_mark")
+            await pilot.pause(0.2)
+            assert isinstance(app.screen, Help)
+            await pilot.press("escape")
+            await pilot.press("q")

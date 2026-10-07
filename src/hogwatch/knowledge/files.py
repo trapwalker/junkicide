@@ -184,7 +184,7 @@ def classify_file(path: str, size: int, mtime: float, stale_days: int) -> Verdic
     if in_downloads:
         v.confidence = min(v.confidence + 0.1, 0.95)
         notes.append("Лежит в «Загрузках» — обычно это временные файлы.")
-    if BACKUP_RX.search(path[len(str(HOME)):]) and v.kind not in ("partial", "installer"):
+    if BACKUP_RX.search(path.removeprefix(str(HOME))) and v.kind not in ("partial", "installer"):
         v.risk = max(v.risk, Risk.PERSONAL)
         v.confidence = min(v.confidence, 0.3)
         notes.append("Путь похож на резервную копию — возможно, это единственный экземпляр данных.")

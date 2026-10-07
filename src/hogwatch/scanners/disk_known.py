@@ -12,7 +12,17 @@ from pathlib import Path
 from ..apps import app_for_bundle_like
 from ..knowledge.paths import RULES, PathRule
 from ..model import Action, ActionKind, Finding, Resource, Risk
-from ..util import HOME, du_bytes, fmt_date, human_duration, newest_mtime, read_plist, short_path, stat_times, which
+from ..util import (
+    HOME,
+    du_bytes,
+    fmt_date,
+    human_duration,
+    newest_mtime,
+    read_plist,
+    short_path,
+    stat_times,
+    which,
+)
 from .base import ScanContext, Scanner
 
 MB = 1024**2
