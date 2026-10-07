@@ -1,5 +1,5 @@
 # junkicide — управление проектом
-.PHONY: help install run report report-quick test lint fmt build clean uvx journal config
+.PHONY: help install run report report-quick test lint fmt build clean uvx journal config release
 
 help:            ## Показать команды
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
@@ -41,3 +41,8 @@ config:          ## Открыть файл настроек
 clean:           ## Удалить артефакты сборки и кэш прошлых сканирований
 	rm -rf dist build .pytest_cache .ruff_cache
 	rm -f ~/Library/Caches/junkicide/findings.json
+
+release:         ## Выпустить версию из pyproject.toml: тег vX.Y.Z → GitHub Actions публикует в PyPI
+	@v=$$(uv run python -c "import tomllib;print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])"); \
+	git diff --quiet && git diff --cached --quiet || { echo "есть незакоммиченные изменения"; exit 1; }; \
+	echo "Выпускаю v$$v"; git tag -a "v$$v" -m "v$$v" && git push origin main "v$$v"
